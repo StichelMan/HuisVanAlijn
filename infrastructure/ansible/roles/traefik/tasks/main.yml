@@ -1,0 +1,27 @@
+---
+# tasks file for roles/migration
+- name: Login to gitlab
+  community.docker.docker_login:
+    registry_url: "{{ regestry_login }}"
+    username: "{{ regestry_user }}"
+    password: "{{ regestry_token }}"
+    reauthorize: true
+
+- name: Create docker container for traefik
+  community.docker.docker_container:
+    name: "traefik"
+    state: started
+    recreate: true
+    restart: true
+    pull: true
+    image: "{{ regestry_image }}:traefik"
+    ports:
+      - "80:80"
+      - "443:443"
+    restart_policy: unless-stopped
+    volumes:
+      - /opt/docker/traefik:/data
+      - /opt/docker/logs/traefik:/var/log
+    networks:
+      - name: "bridge-production"
+      - name: "bridge-staging"

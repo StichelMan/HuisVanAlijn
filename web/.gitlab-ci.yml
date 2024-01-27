@@ -1,0 +1,161 @@
+stages:
+  - build
+  - test
+  - deploy
+  - scan
+
+build:
+  image: node:18
+  stage: build
+  tags:
+    - proxmox-gitlab-runner
+  script:
+    - npm install
+    - npm run build
+  cache:
+    paths:
+      - node_modules/
+
+test:
+  image: node:18
+  stage: test
+  tags:
+    - proxmox-gitlab-runner
+  before_script:
+   - npm install --save-dev jest
+   - npm install --save-dev jest-environment-jsdom
+    - npm install
+  script:
+   - npm test -- --passWithNoTests
+  cache:
+    paths:
+      - node_modules/
+
+#code-coverage:
+#  image: node:18
+#  stage: test
+#  tags:
+#    - proxmox-gitlab-runner
+#  script:
+#    - npm install
+#    - npm run coverage
+#    - npx jest --ci --coverage
+#  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+#  artifacts:
+#    reports:
+#      coverage_report:
+#        coverage_format: cobertura
+#        path: coverage/cobertura-coverage.xml
+
+security-scan:
+  image: node:18
+  stage: test
+  tags:
+    - proxmox-gitlab-runner
+  script:
+    - npm install
+    - npm run lint
+    - npm run security-scan
+  cache:
+    paths:
+      - node_modules/
+
+docker-registry-staging:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: deploy
+  before_script:
+    - docker --version
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - docker build -f docker/alpine/Dockerfile -t $CI_REGISTRY_IMAGE:staging .
+    - docker push $CI_REGISTRY_IMAGE:staging
+  environment:
+    name: STAGING
+    url: http://49.13.56.80:8080/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "development"
+
+docker-registry-production:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: deploy
+  before_script:
+    - docker --version
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - docker build -f docker/alpine/Dockerfile -t $CI_REGISTRY_IMAGE:production .
+    - docker push $CI_REGISTRY_IMAGE:production
+  environment:
+    name: PRODUCTION
+    url: http://49.13.56.80:80/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+ansible-staging:
+  image: ubuntu:lunar
+  stage: deploy
+  tags:
+    - proxmox-gitlab-runner
+  before_script:
+    - apt-get update
+    - apt-get install ansible -y
+    - apt-get install sshpass -y
+    - ansible-galaxy collection install community.docker
+  script:
+    - cd ansible
+    - echo $ANSIBLE_VAULT_PASS > pass.txt
+    - chmod o-w .
+    - ansible-playbook -c ansible.cfg playbook.yml --vault-id pass.txt --extra-vars "environment_name=$NAME_LOWER regestry_login=$CI_REGISTRY regestry_image=$CI_REGISTRY_IMAGE regestry_user=$CI_REGISTRY_USER regestry_password=$CI_REGISTRY_PASSWORD web_port=$WEB_PORT"
+  needs:
+    - docker-registry-staging
+  environment:
+    name: STAGING
+    url: http://49.13.56.80:8080/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "development"
+
+ansible-production:
+  image: ubuntu:lunar
+  stage: deploy
+  tags:
+    - proxmox-gitlab-runner
+  before_script:
+    - apt-get update
+    - apt-get install ansible -y
+    - apt-get install sshpass -y
+    - ansible-galaxy collection install community.docker
+  script:
+    - cd ansible
+    - echo $ANSIBLE_VAULT_PASS > pass.txt
+    - chmod o-w .
+    - ansible-playbook -c ansible.cfg playbook.yml --vault-id pass.txt --extra-vars "environment_name=$NAME_LOWER regestry_login=$CI_REGISTRY regestry_image=$CI_REGISTRY_IMAGE regestry_user=$CI_REGISTRY_USER regestry_password=$CI_REGISTRY_PASSWORD web_port=$WEB_PORT"
+  needs:
+    - docker-registry-production
+  environment:
+    name: PRODUCTION
+    url: http://49.13.56.80:80/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+trivy_scan:
+  stage: scan
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+  - apk update
+  - apk add curl
+  - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - trivy image --exit-code 0 --severity HIGH,CRITICAL --output trivy_results_production.json $CI_REGISTRY_IMAGE:production
+    - trivy image --exit-code 0 --severity HIGH,CRITICAL --output trivy_results_staging.json $CI_REGISTRY_IMAGE:staging
+  artifacts:
+    paths:
+      - trivy_results_production.json
+      - trivy_results_staging.json
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "main"'

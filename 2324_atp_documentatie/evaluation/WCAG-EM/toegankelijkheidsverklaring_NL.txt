@@ -1,0 +1,15 @@
+Toegankelijkheidsverklaring
+Huis Van Alijn: Poppen zet zich in voor het bieden van een inclusieve gebruikerservaring. 
+De applicatie beschikt over een pagina Toegankelijkheidsinstellingen, waarmee gebruikers de interface kunnen aanpassen aan hun behoeften. 
+Instellingen omvatten schakelaars voor een grotere lettergrootte en een hoger contrast. 
+Het is belangrijk op te merken dat na de time-out van de screensaver alle instellingen worden teruggezet naar de standaardwaarden, waardoor elke gebruiker een nieuwe start krijgt.
+
+Standaardtoegankelijkheid
+De standaardstatus van de applicatie voldoet aan de standaardrichtlijnen voor toegankelijkheid, waardoor zichtbaarheid en bruikbaarheid voor alle gebruikers wordt gegarandeerd.
+
+Toegankelijkheidsevaluatie:
+De applicatie maakt gebruik van duidelijke en betekenisvolle alternatieve tekst voor niet-tekstuele inhoud. 
+Het gebruik van oriëntatiepunten en kopjes verbetert de structuur en navigatie van de applicatie. 
+In de meeste visuele presentaties blijft het juiste kleurcontrast behouden, wat bijdraagt aan een betere leesbaarheid. 
+Het project getuigt van toewijding aan schaalbaarheid en toekomstige uitbreidingen, in lijn met inclusieve ontwerpprincipes. 
+Opmerking: er worden voortdurend inspanningen geleverd om de toegankelijkheid te verbeteren, en feedback van gebruikers is welkom voor voortdurende verbeteringen.

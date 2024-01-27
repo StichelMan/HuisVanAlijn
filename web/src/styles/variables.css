@@ -1,0 +1,33 @@
+/* default style scheme Huis Van Alijn */
+/* IF CHANGED, UPDATE 'constants.jsx' ACCORDINGLY */
+
+@font-face {
+    font-family: "Univers Ronder"; /* Specify the desired font family name */
+    src: url('../assets/fonts/UniversRonder.otf') format('opentype'); /* Provide the correct path to your font file */
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --background-primary: #ffff00;
+    --background-secondary: #0041ff;
+    --background-white: #ffffff;
+    --background-black: #000000;
+    --button-default-width: 15.4rem;
+    --button-default-height: 1.18rem;
+    --button-default-bg: #ffffff;
+    --button-default-border: none;
+    --button-default-border-radius: 5.89rem;
+    --button-default-color: #000000;
+    --button-default-padding: 1.88rem 0.59rem;
+    --button-selected-bg: #ffff00;
+    --button-selected-border: 0.12rem solid #000000;
+    --button-special-bg: #ffff00;
+    --button-special-border: 0.12rem solid #0041ff;
+    --button-special-color: #0041ff;
+    --font-family: "Univers Ronder", sans-serif;
+    --font-weight: 400;
+    --font-size: 1.4rem;
+    --line-height: 1.7rem;
+    --font-color: #212529;
+}

@@ -1,0 +1,14 @@
+Accessibility Statement
+Huis Van Alijn: Poppen is committed to providing an inclusive user experience. 
+The application features an Accessibility Settings page, allowing users to tailor the interface to their needs. 
+Settings include toggles for a bigger font size and higher contrast. 
+It's important to note that after the screensaver timeout, all settings reset to default, ensuring a fresh start for each user.
+
+Default Accessibility
+The application's default state adheres to standard accessibility guidelines, ensuring visibility and usability for all users.
+
+Accessibility Evaluation:
+The application employs clear and meaningful alternative text for non-text content. 
+The use of landmarks and headings enhances the structure and navigation of the application. Proper color contrast is maintained in most visual presentations, contributing to improved readability. 
+The project demonstrates a commitment to scalability and future expansions, aligning with inclusive design principles. 
+Note: Continuous efforts are made to enhance accessibility, and user feedback is welcomed for ongoing improvements.

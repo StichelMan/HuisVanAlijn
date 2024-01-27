@@ -1,0 +1,40 @@
+global:
+  checknewversion: true
+  sendanonymoususage: true
+providers:
+  file:
+    directory: /etc/traefik
+    watch: true
+api:
+  dashboard: true
+metrics:
+  prometheus:
+    manualrouting: true
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
+log:
+  filePath: "/var/log/traefik.log"
+  level: INFO
+accesslog:
+  bufferingsize: 100
+  filepath: "/var/log/access.log"
+  filters:
+    statuscodes: "400-499"
+experimental:
+  http3: true
+entrypoints:
+  in80:
+    address: ":80"
+  in443:
+    address: ":443"
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: "anthony.tacquet@student.odisee.be"
+      storage: "/data/acme.json"
+      tlschallenge: true
+      httpChallenge:
+        entryPoint: "in80"

@@ -1,0 +1,38 @@
+---
+# tasks file for roles/migration
+- name: Remove data directory
+  ansible.builtin.file:
+    path: /opt/docker/mysql-data
+    state: absent
+
+- name: Login to gitlab
+  community.docker.docker_login:
+    registry_url: "{{ regestry_login }}"
+    username: "{{ regestry_user }}"
+    password: "{{ regestry_token }}"
+    reauthorize: true
+
+- name: Create docker container for migration "{{ environment_name }}"
+  community.docker.docker_container:
+    name: "migration-{{ environment_name }}"
+    state: started
+    recreate: true
+    restart: true
+    pull: true
+    image: "{{ regestry_image }}:migration-{{ environment_name }}"
+    env:
+      DB_CONNECTION: "mysql"
+      DB_HOST: "mysql-{{ environment_name }}"
+      DB_PORT: "3306"
+      DB_DATABASE: "{{ mysql_database }}"
+      DB_USERNAME: "{{ mysql_extra_user }}"
+      DB_PASSWORD: "{{ mysql_extra_pass }}"
+      SUB_DIR: "/{{ environment_name }}-api/"
+    restart_policy: unless-stopped
+    links:
+      - mysql-{{ environment_name }}
+    volumes:
+      - /opt/docker/images:/var/www/storage/app/public/
+      - "/opt/docker/logs/migration-{{ environment_name }}:/var/log"
+    networks:
+      - name: "bridge-{{ environment_name }}"

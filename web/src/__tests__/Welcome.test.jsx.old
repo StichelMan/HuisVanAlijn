@@ -1,0 +1,22 @@
+// src/__tests__/Welcome.test.jsx
+import React from 'react';
+import { render, screen, act } from '@testing-library/react';
+import Welcome from '../views/Welcome';
+
+describe('Welcome', () => {
+    it('renders welcome message', () => {
+        render(<Welcome changeView={() => {}} />);
+        const welcomeText = screen.getByText(/Welkom in het poppenhuis/i);
+        expect(welcomeText).toBeInTheDocument();
+    });
+
+    it('calls changeView prop when "Ontdek de Poppen" button is clicked', () => {
+        const changeViewMock = jest.fn();
+        render(<Welcome changeView={changeViewMock} />);
+        const discoverButton = screen.getByText(/Ontdek de Poppen/i);
+        act(() => {
+            discoverButton.click();
+        });
+        expect(changeViewMock).toHaveBeenCalledWith('Kamers');
+    });
+});

@@ -1,0 +1,11 @@
+---
+# tasks file for roles/network
+- name: Create a network for staging
+  community.docker.docker_network:
+    name: bridge-staging
+    internal: false
+
+- name: Create a network
+  community.docker.docker_network:
+    name: bridge-production
+    internal: false

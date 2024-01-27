@@ -1,0 +1,90 @@
+/* ... rest of your styles ... */
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("../assets/background-bokeh-darker.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    z-index: -1; /* Send it to the background */
+    scale: 1.23;
+}
+
+.background-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    filter: blur(3px);
+    z-index: -2;
+}
+
+.background-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -3;
+}
+
+.content {
+    position: relative;
+    z-index: 2; /* Ensure content is above the background layers */
+    /* Add any additional styling needed for layout */
+}
+
+.language-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 30px; /* Increased spacing for better separation */
+    width: 1150px;
+}
+
+.language-buttons button {
+    border: none;
+    cursor: pointer;
+    font-size: 30px; /* Slightly larger font size for better readability */
+    font-weight: bold; /* Bold text for better visibility */
+    transition: all 0.3s; /* Transition for both color and border */
+    min-width: 120px; /* Ensure all buttons have the same width */
+    text-align: center; /* Ensure text is centered */
+    width: 300px;
+    height: 125px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 30px;
+}
+
+.language-buttons button:hover, .language-buttons button:focus {
+    background-color: #0056b3; /* Darker shade on hover/focus */
+    border-color: #004080; /* Slight border color change on hover/focus */
+}
+
+.screensaver img {
+    margin: 0 auto 0; /* Center the image with top margin */
+    width: 300px; /* Adjust the size of the icon if necessary */
+}
+
+.clickhere-gif {
+    height: 350px;
+}
+
+.invisible{
+    visibility: hidden;
+}
+
+.screensaver .flex-col{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}

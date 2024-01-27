@@ -1,0 +1,237 @@
+stages:
+  - build
+  - test
+  - deploy
+  - scan
+
+variables:
+  DOCKER_IMAGES: '"infrastructure:migration-staging" "infrastructure:mysql" "infrastructure:phpmyadmin" "infrastructure:traefik"'
+  COMPOSER_CACHE_DIR: "$CI_PROJECT_DIR/.composer"
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - app/vendor
+    - $COMPOSER_CACHE_DIR
+
+build:
+  image: php:8.3.1RC3-bullseye
+  stage: build
+  before_script:
+    - apt update -y
+    - apt install curl git unzip -y
+    - curl -sS https://getcomposer.org/installer -o composer-setup.php
+    - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    - cd app
+  script:
+    - composer update
+    - composer install
+  # using cache give files to test stage
+  cache:
+    paths:
+      - app/vendor
+
+test:
+  image: php:8.3.1RC3-bullseye
+  stage: test
+  before_script:
+    - apt update -y
+    - apt install curl git unzip -y
+    - curl -sS https://getcomposer.org/installer -o composer-setup.php
+    - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    - cd app
+  script:
+    - composer update
+    - php artisan security-check:now > check.txt
+    - cat check.txt
+    #- php artisan test
+  artifacts:
+    paths:
+      - app/check.txt
+
+coverage-test:
+  image: php:8.3.1RC3-bullseye
+  stage: test
+  variables:
+    XDEBUG_MODE: coverage
+    SAIL_XDEBUG_MODE: develop,debug,coverage
+  before_script:
+    - apt update -y
+    - apt install curl git unzip  zip libzip-dev zlib1g-dev -y
+    - docker-php-ext-install zip
+    - pecl install xdebug && docker-php-ext-enable xdebug
+    - curl -sS https://getcomposer.org/installer -o composer-setup.php
+    - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    - echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    - cd app
+  script: # need mysql connection, maybe use sqllite for pipelines and tests
+    - composer update
+    - composer require --dev phpunit/phpunit phpunit/php-code-coverage
+    - php ./vendor/bin/phpunit --coverage-text --coverage-cobertura=coverage.cobertura.xml || true # Temporary
+    - php ./vendor/bin/phpunit --coverage-text --colors=never || true
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: app/coverage.cobertura.xml
+
+docker-registry-staging:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: deploy
+  before_script:
+    - docker --version
+    - apk update
+    - apk add git
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - docker build -f docker/migration/alpine/Dockerfile -t $CI_REGISTRY_IMAGE:migration-staging .
+    - docker push $CI_REGISTRY_IMAGE:migration-staging
+  environment: 
+    name: STAGING
+    url: http://49.13.56.80:3307/
+  rules:
+   - if: $CI_COMMIT_BRANCH == "development"
+
+docker-registry-production:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: deploy
+  before_script:
+    - docker --version
+    - apk update
+    - apk add git
+  script: 
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - docker build -f docker/migration/alpine/Dockerfile -t $CI_REGISTRY_IMAGE:migration-production .
+    - docker push $CI_REGISTRY_IMAGE:migration-production
+  environment: 
+    name: PRODUCTION
+    url: http://49.13.56.80:3306/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+docker-registry-mysql:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: deploy
+  before_script:
+    - docker --version
+    - apk update
+    - apk add git
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - docker build -f docker/mysql/Dockerfile -t $CI_REGISTRY_IMAGE:mysql .
+    - docker push $CI_REGISTRY_IMAGE:mysql
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "main"'
+
+docker-registry-phpmyadmin:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: deploy
+  before_script:
+    - docker --version
+    - apk update
+    - apk add git
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - docker build -f docker/phpmyadmin/custom/Dockerfile -t $CI_REGISTRY_IMAGE:phpmyadmin .
+    - docker push $CI_REGISTRY_IMAGE:phpmyadmin
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "main"'
+
+docker-registry-traefik:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: deploy
+  before_script:
+    - docker --version
+    - apk update
+    - apk add git
+    - mkdir ./docker/traefik/conf/auth
+    - echo $TRAEFIK_HASH_PASS_STRING > ./docker/traefik/conf/auth/pass.txt
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - docker build -f docker/traefik/Dockerfile -t $CI_REGISTRY_IMAGE:traefik .
+    - docker push $CI_REGISTRY_IMAGE:traefik
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "main"'
+
+ansible-staging:
+  image: ubuntu:lunar
+  stage: deploy
+  before_script:
+    - apt-get update
+    - apt-get install ansible -y
+    - apt-get install sshpass -y
+    - ansible-galaxy collection install community.docker
+  script:
+    - cd ansible
+    - echo $ANSIBLE_VAULT_PASS > pass.txt
+    - chmod o-w .
+    - ansible-playbook -c ansible.cfg playbook.yml --vault-id pass.txt --extra-vars "environment_name=$NAME_LOWER regestry_login=$CI_REGISTRY regestry_image=$CI_REGISTRY_IMAGE regestry_user=$CI_REGISTRY_USER regestry_token=$CI_JOB_TOKEN mysql_password=$MYSQL_PASSWORD mysql_database=$MYSQL_DATABASE mysql_extra_user=$MYSQL_EXTRA_USER mysql_extra_pass=$MYSQL_EXTRA_PASS"
+  needs:
+    - docker-registry-staging
+    - docker-registry-traefik
+    - docker-registry-phpmyadmin
+    - docker-registry-mysql
+  environment: 
+    name: STAGING
+    url: http://49.13.56.80:3307/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "development"
+
+ansible-production:
+  image: ubuntu:lunar
+  stage: deploy
+  before_script:
+    - apt-get update
+    - apt-get install ansible -y
+    - apt-get install sshpass -y
+    - ansible-galaxy collection install community.docker
+  script:
+    - cd ansible
+    - echo $ANSIBLE_VAULT_PASS > pass.txt
+    - chmod o-w .
+    - ansible-playbook -c ansible.cfg playbook.yml --vault-id pass.txt --extra-vars "environment_name=$NAME_LOWER regestry_login=$CI_REGISTRY regestry_image=$CI_REGISTRY_IMAGE regestry_user=$CI_REGISTRY_USER regestry_token=$CI_JOB_TOKEN mysql_password=$MYSQL_PASSWORD mysql_database=$MYSQL_DATABASE mysql_extra_user=$MYSQL_EXTRA_USER mysql_extra_pass=$MYSQL_EXTRA_PASS"
+  needs:
+    - docker-registry-production
+    - docker-registry-traefik
+    - docker-registry-phpmyadmin
+    - docker-registry-mysql
+  environment: 
+    name: PRODUCTION
+    url: http://49.13.56.80:3306/
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+trivy_scan:
+  stage: scan
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+  - apk update
+  - apk add curl
+  - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_JOB_TOKEN" "$CI_REGISTRY"
+    - trivy image --exit-code 0 --severity HIGH,CRITICAL --output trivy_results_migration-staging.json $CI_REGISTRY_IMAGE:migration-staging
+    - trivy image --exit-code 0 --severity HIGH,CRITICAL --output trivy_results_mysql.json $CI_REGISTRY_IMAGE:mysql
+    - trivy image --exit-code 0 --severity HIGH,CRITICAL --output trivy_results_phpmyadmin.json $CI_REGISTRY_IMAGE:phpmyadmin
+    - trivy image --exit-code 0 --severity HIGH,CRITICAL --output trivy_results_traefik.json $CI_REGISTRY_IMAGE:traefik
+  artifacts:
+    paths:
+      - trivy_results_migration-staging.json
+      - trivy_results_mysql.json
+      - trivy_results_phpmyadmin.json
+      - trivy_results_traefik.json
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "development" || $CI_COMMIT_BRANCH == "main"'

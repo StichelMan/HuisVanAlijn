@@ -1,0 +1,5 @@
+- name: Test traefik
+  hosts: server
+  become: true
+  roles:
+    - traefik

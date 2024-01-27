@@ -1,0 +1,25 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import PuppetsList from '../components/InfoSection/PuppetsList';
+
+describe('PoppenList', () => {
+    it('renders loading message initially', () => {
+        render(<PuppetsList roomNumber={"1"} />);
+        const loadingMessage = screen.getByText(/Loading puppets.../i);
+        expect(loadingMessage).toBeInTheDocument();
+    });
+
+    it('renders error message when there is an error fetching puppets', async () => {
+        // Mock axios to simulate an error
+        jest.mock('axios');
+        require('axios').get.mockRejectedValueOnce(new Error(''));
+
+        render(<PuppetsList roomNumber={"1"} />);
+
+        // Wait for the component to update after the axios call
+        await screen.findByText(/.../i);
+
+        const errorMessage = screen.getByText(/.../i);
+        expect(errorMessage).toBeInTheDocument();
+    });
+});

@@ -1,0 +1,44 @@
+{
+  "welcome_view": {
+    "discoverDolls": "Discover the Puppets",
+    "testKnowledge": "Test your knowledge",
+    "welcomeTitle": "Welcome to the house of puppetry",
+    "designScene": "Design your own scene"
+  },
+  "rooms_view": {
+    "title": "Choose a topic you would like to know more about"
+  },
+  "accessibility_view": {
+    "title": "ACCESSIBILITY",
+    "subTitle": "Settings",
+    "contrastSetting0": "HIGHER",
+    "contrastSetting1": "CONTRAST",
+    "fontSizeSetting0": "BIGGER",
+    "fontSizeSetting1": "FONT SIZE",
+    "languageSetting": "LANGUAGE"
+  },
+  "puppetdetail_component": {
+    "selectReminder": "Select an item",
+    "loadingReminder": "Loading puppet details...",
+    "errorReminder": "Error loading puppet details:",
+    "date": "Date:",
+    "company": "Company:",
+    "makers": "Maker(s):",
+    "production": "Production:",
+    "related": "Related collection"
+  },
+  "puppetslist_component": {
+    "loadingReminder": "Loading puppets...",
+    "errorReminder": "This service is currently down. Please try again later."
+  },
+  "createscene_view": {
+    "toggleDrawer": "Choose an object",
+    "deleteLast": "Delete the last figure",
+    "exportScene": "Add your scene to the screensaver",
+    "puppets": "Puppets",
+    "backgrounds": "Backgrounds",
+    "expressions": "Expressions",
+    "limitationWarning": "Cannot add more than 10 images."
+  }
+}
+

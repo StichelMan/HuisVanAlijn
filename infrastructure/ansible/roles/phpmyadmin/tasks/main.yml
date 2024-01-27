@@ -1,0 +1,24 @@
+---
+# tasks file for roles/phpmyadmin
+- name: Login to gitlab
+  community.docker.docker_login:
+    registry_url: "{{ regestry_login }}"
+    username: "{{ regestry_user }}"
+    password: "{{ regestry_token }}"
+    reauthorize: true
+
+- name: Create docker container for "{{ environment_name }}"
+  community.docker.docker_container:
+    name: "phpmyadmin-{{ environment_name }}"
+    state: started
+    recreate: true
+    restart: true
+    pull: true
+    image: "{{ regestry_image }}:phpmyadmin"
+    env:
+      HOST: mysql-{{ environment_name }}
+    restart_policy: unless-stopped
+#    volumes:
+#      - "/opt/docker/logs/phpmyadmin-{{ environment_name }}:/var/log"
+    networks:
+      - name: "bridge-{{ environment_name }}"

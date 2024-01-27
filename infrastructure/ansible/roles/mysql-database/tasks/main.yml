@@ -1,0 +1,28 @@
+---
+# tasks file for roles/mysql-database
+- name: Login to gitlab
+  community.docker.docker_login:
+    registry_url: "{{ regestry_login }}"
+    username: "{{ regestry_user }}"
+    password: "{{ regestry_token }}"
+
+- name: Create docker container for mysql db 
+  community.docker.docker_container:
+    name: "mysql-{{ environment_name }}"
+    state: started
+    recreate: true
+    restart: true
+    pull: true
+    image: "{{ regestry_image }}:mysql"
+    env:
+      ROOT_PASSWORD: "{{ mysql_password }}"
+      DATABASE: "{{ mysql_database }}"
+      EXTRA_USER: "{{ mysql_extra_user }}"
+      EXTRA_PASS: "{{ mysql_extra_pass }}"
+      EXTRA_DATABASE: "{{ mysql_database }}"
+      EXTRA_PERMISSIONS: "ALL"
+    restart_policy: unless-stopped
+    volumes:
+      - "/opt/docker/logs/mysql-{{ environment_name }}:/var/log"
+    networks:
+      - name: "bridge-{{ environment_name }}"

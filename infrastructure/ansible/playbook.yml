@@ -1,0 +1,10 @@
+- name: Installation backend
+  hosts: server
+  become: true
+  roles:
+    - network
+    - mysql-database
+    - phpmyadmin
+    - traefik
+    - migration
+    - traefik

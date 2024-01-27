@@ -1,0 +1,140 @@
+http:
+  routers:
+    dashboard:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - auth
+        - slash
+      service: api@internal
+    website-production:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && PathPrefix(`/production`)"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - slash
+        - strip
+      service: web-prod
+    website-staging:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && PathPrefix(`/staging`)"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - slash
+        - strip
+      service: web-stag
+    docusaurus-production:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && PathPrefix(`/docs-production`)"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - slash
+        - strip
+      service: doc-prod
+    docusaurus-staging:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && PathPrefix(`/docs-staging`)"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - slash
+        - strip
+      service: doc-stag
+    phpmyadmin-production:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && PathPrefix(`/admin-production`)"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - slash
+        - strip
+        - global-stripprefix
+      service: admin-prod
+    phpmyadmin-staging:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && PathPrefix(`/admin-staging`)"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - slash
+        - strip
+        - global-stripprefix
+      service: admin-stag
+    migration-production:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && PathPrefix(`/production-api`)"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - slash
+        - strip
+        - global-stripprefix
+      service: api-prod
+    migration-staging:
+      entrypoints: "in443"
+      rule: "Host(`poppen.antwaan.be`) && PathPrefix(`/staging-api`)"
+      tls:
+        certresolver: "letsencrypt"
+      middlewares:
+        - slash
+        - strip
+        - global-stripprefix
+      service: api-stag
+  middlewares:
+    slash:
+      redirectregex:
+        regex: ^(http[s]?://[^/]+/[a-zA-Z0-9-_]+)$
+        replacement: ${1}/
+        permanent: true
+    strip:
+      replacepathregex:
+        regex: ([a-zA-Z0-9-_]+\/)(.*$)
+        replacement: ${2}
+    auth:
+      basicAuth:
+        usersFile: "/etc/traefik/auth/pass.txt"
+    global-stripprefix:
+      stripPrefix:
+        prefixes:
+          - "/staging-api"
+          - "/production-api"
+          - "/admin-production"
+          - "/admin-staging"
+  services:
+    web-prod:
+      loadbalancer:
+        servers:
+          - url: "http://web-production"
+    web-stag:
+      loadbalancer:
+        servers:
+          - url: "http://web-staging"
+    doc-prod:
+      loadbalancer:
+        servers:
+          - url: "http://doc-production"
+    doc-stag:
+      loadbalancer:
+        servers:
+          - url: "http://doc-staging"
+    admin-prod:
+      loadbalancer:
+        servers:
+          - url: "http://phpmyadmin-production"
+    admin-stag:
+      loadbalancer:
+        servers:
+          - url: "http://phpmyadmin-staging"
+    api-prod:
+      loadbalancer:
+        servers:
+          - url: "http://migration-production"
+    api-stag:
+      loadbalancer:
+        servers:
+          - url: "http://migration-staging"

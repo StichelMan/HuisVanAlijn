@@ -1,0 +1,95 @@
+.game-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    max-width: 40rem;
+}
+
+.game-cards div{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    max-width: 40rem;
+}
+
+/* Apply flex-direction: row or row-reverse based on odd or even row */
+.game-cards > * {
+    flex-direction: row;
+}
+
+/* Apply flex-direction: row-reverse for even rows */
+.game-cards > *:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.game-card {
+    width: 8rem;
+    height: 6rem;
+    border-radius: 1rem;
+    border: 1px solid #000000;
+    font-size: 0.8rem;
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.game-card:hover {
+    border: 3px solid #004ff8;
+}
+
+.game-card-image img {
+    max-width: 6.5rem;
+    max-height: 4.5rem;
+    overflow: hidden;
+
+}
+
+.game-card-image {
+    overflow: hidden;
+}
+
+.game-card-selected {
+    border: 1px solid #000000;
+}
+
+.game-card-selection {
+    border: 3px solid #004ff8;
+}
+
+.game-card-disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+    box-shadow: none;
+    background-color: #ccc;
+    color: #333;
+    pointer-events: none;
+}
+
+.game-card-paired{
+    opacity: 0.8;
+    cursor: not-allowed;
+    box-shadow: none;
+    background-color: #3b9307;
+    color: #333;
+    pointer-events: none;
+    border: 3px solid #3b9307;
+}
+
+.game-card-incorrect{
+    opacity: 0.8;
+    cursor: not-allowed;
+    box-shadow: none;
+    color: #333;
+    pointer-events: none;
+    border: 3px solid #9b1b1b;
+}

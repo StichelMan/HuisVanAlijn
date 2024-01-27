@@ -1,0 +1,541 @@
+/* Import external stylesheets */
+@import "./variables.css";
+@import "./buttons.css";
+@import "./game.css";
+@import "./oneliners.css";
+@import "./contentOverlay.css";
+@import "./scene.css";
+@import "./room.css";
+@import "./screensaver.css";
+/* Global Styles */
+html, body, #root {
+    height: 100vh;
+    width: 100%;
+    padding: 0;
+    margin: auto 0;
+}
+
+body {
+    scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+    color: var(--font-color);
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+/* Layout Styles */
+.full-screen-wrapper {
+    height: 100vh;
+}
+
+/* Typography Styles */
+* {
+    font-family: var(--font-family);
+    line-height: var(--line-height);
+    font-size: var(--font-size);
+    font-weight: var(--font-weight);
+}
+
+.main-title {
+    font-weight: 600;
+    font-size: 1.89rem;
+}
+
+/* Background Styles */
+.background-image {
+    background-image: url("../assets/background-bokeh-darker.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    height: 100vh; /* Ensure it covers the full viewport height */
+}
+
+/*.background-image::before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    background: inherit; !* Inherit the same background *!*/
+/*    filter: blur(5px); !* Apply blur *!*/
+/*}*/
+
+/*!* Add an overlay for darkening *!*/
+/*.background-image::after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    background: rgba(0, 0, 0, 0.5); !* Semi-transparent black overlay *!*/
+/*}*/
+
+.bg-scene {
+    background-image: url("../assets/dummyBg-scene.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+
+.bg-scene {
+    background-image: url("../assets/dummyBg-scene.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    height: 100vh; /* Ensure it covers the full viewport height */
+}
+
+/*.background-image::before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    background: inherit; !* Inherit the same background *!*/
+/*    filter: blur(5px); !* Apply blur *!*/
+/*}*/
+
+/*!* Add an overlay for darkening *!*/
+/*.background-image::after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    background: rgba(0, 0, 0, 0.5); !* Semi-transparent black overlay *!*/
+/*}*/
+
+.bg-scene {
+    background-image: url("../assets/dummyBg-scene.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+
+/* Container Styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+}
+
+.container .app {
+    display: flex;
+    overflow: auto;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.container .app {
+    display: flex;
+    overflow: auto;
+    justify-content: center;
+    margin: 1rem auto;
+}
+
+.container .app {
+    display: flex;
+    overflow: auto;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Logo Styles */
+.logo-image {
+    max-width: 68px;
+    height: auto;
+}
+
+/* Navigation Styles */
+.navbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: right;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+/* Navigation Styles */
+.nav-button {
+    border: none;
+    background: none;
+    padding: 0.5rem;
+}
+
+.nav-button img {
+    min-width: 3rem;
+    cursor: pointer;
+}
+
+.back-wrapper {
+    flex: 1;
+    text-align: left;
+}
+
+.info-wrapper{
+    padding: 2.5rem 2rem 0 2rem;
+}
+
+/* old
+.home-button {
+  right: 0;
+}
+
+.accessibility-button {
+  right: 3.5rem;
+}
+
+.back-button {
+  left: 0;
+}
+*/
+
+/* Component-specific Styles */
+.kamers-buttons {
+    max-width: 60rem;
+    overflow: auto;
+}
+
+
+
+
+/* Accessibility form layout and styling */
+
+.language-buttons-setting {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.language-buttons-setting Button {
+    margin: 0.5rem 0;
+    padding: 20px;
+    height: 40px;
+    width: 200px;
+    background-color: white !important;
+}
+
+.accessibility-settings .accessibility-fields {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    color: #000;
+}
+
+.accessibility-setting-col{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-primary);
+    border: 2px solid;
+    border-radius: 17px;
+    padding: 0 17px;
+}
+
+.accessibility-fields .accessibility-setting {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 17px;
+    background-color: var(--background-primary);
+    border: 2px solid;
+    border-radius: 17px;
+    padding: 0 17px;
+
+}
+
+.accessibility-setting label {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+
+}
+
+.accessibility-setting img {
+    max-width: 0.53rem;
+}
+
+
+/* Accessibility checkbox input interactive switch styling */
+.switch {
+    position: relative;
+    display: inline-block;
+    min-width: 3.53rem;
+    min-height: 2rem;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    box-shadow: rgba(0, 0, 0, 0.16) 0 0.59rem 2.12rem 0, rgba(0, 0, 0, 0.06) 0 0 0 0.06rem;
+}
+
+.slider:before {
+    position: absolute;
+    content: '';
+    height: 1.53rem;
+    width: 1.53rem;
+    left: 0.24rem;
+    bottom: 0.24rem;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    box-shadow: 0 0 0.06rem #2196f3;
+}
+
+input:checked + .slider {
+    background-color: #2196f3;
+    box-shadow: 0 0 0.06rem #2196f3;
+}
+
+input:checked + .slider:before {
+    -ms-transform: translateX(1.53rem);
+    transform: translateX(1.53rem);
+}
+
+.slider.round {
+    border-radius: 2rem;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+
+.puppetlist {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5rem;
+    width: 60%;
+    margin: 0;
+}
+
+.puppet-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    color: #000;
+    align-items: center;
+    padding-bottom: 1rem;
+}
+
+/*.puppet-list div {*/
+/*    width: calc(33% - 2rem);*/
+/*    background-color: white;*/
+/*}*/
+
+.puppetdetail {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    justify-content: center;
+    align-items: center;
+    padding: 90px 15px 0 15px;
+    overflow: hidden;
+    width: 30%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    background-color: #fff;
+}
+
+.puppetListWrapper img {
+    width: 100px;
+    border-radius: 1px;
+}
+
+
+.puppet-list div {
+    width: calc(33% - 2rem);
+    height: 250px; /* Set a fixed height for the cards */
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensures no part of the image spills out of the card */
+    position: relative; /* For absolute positioning of children */
+}
+
+.button-wrapper {
+    border-radius: 1rem;
+    border: 1px solid #000;
+    box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+}
+
+.button-wrapper:hover {
+    border-radius: 3rem;
+    border: 1px solid #655eff;
+}
+
+/*.button-wrapper:active, .button-wrapper:focus{*/
+/*    border-radius: 2rem;*/
+/*    border: 1px solid #000000;*/
+/*}*/
+
+
+/*.puppetlist {*/
+/*    margin: -1rem 0;*/
+/*}*/
+
+/*.puppetlist ul {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    flex-wrap: wrap;*/
+/*    overflow: auto;*/
+/*    justify-content: center;*/
+/*    margin: 0;*/
+/*    gap: 0.4rem;*/
+/*    color: #000;*/
+/*    align-items: center;*/
+/*    padding-bottom: 1rem;*/
+/*    padding-top: 2rem;*/
+/*    max-width: 30rem;*/
+/*}*/
+
+/*.puppetlist ul li {*/
+/*    border: 1px solid #000000; !* Set the border color and thickness *!*/
+/*    border-radius: 15px; !* Set the border radius *!*/
+/*    background-color: #fff;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    width: 200px;*/
+/*    height: 300px;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.puppetListWrapper {*/
+/*    max-width: 150px;*/
+/*    height: 250px;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    overflow: hidden;*/
+
+/*}*/
+
+/*.puppetlist ul li button {*/
+/*    border: none;*/
+/*    background: none;*/
+/*    padding: 0;*/
+/*    scale: 1.5;*/
+/*}*/
+
+/*.puppetlist ul li img {*/
+/*    width: 110%;*/
+/*}*/
+
+/*.saveSceneButton {*/
+/*    position: fixed;*/
+/*    bottom: 50px;*/
+/*    right: 50px;*/
+/*}*/
+
+/*@media screen and (max-width: 735px) {*/
+/*    * {*/
+/*        font-size: 1.1rem;*/
+/*    }*/
+/*}*/
+
+
+/*.roomdetail-wrapper{*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    justify-content: space-between;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.puppetlist{*/
+/*    flex: 1;*/
+/*    overflow: auto;*/
+/*    width: 100%;*/
+/*}*/
+/*.PuppetDetailImage{*/
+/*    width: 100%;*/
+/*    height: auto;*/
+/*}*/
+
+/*.puppetlist::-webkit-scrollbar {*/
+/*    display: none;*/
+/*}*/
+
+/*.puppetdetail{*/
+/*    max-width: 30%;*/
+/*    background-color: #fff;*/
+/*    margin: -1rem 0 -1rem 0;*/
+/*}*/
+/*.puppet-detail{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 1rem;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    padding: 2rem .5rem 0 .5rem;*/
+/*    overflow: hidden;*/
+/*}*/
+/*.puppetdetail img{*/
+/*    border-radius: 1rem;*/
+/*    max-height: 10rem;*/
+/*    width: auto;*/
+/*}*/
+
+/*.puppet-detail p, .puppet-detail h2, .puppet-detail ul li {*/
+/*    font-size: 1rem;*/
+/*}*/
+
+/*.puppet-detail ul li {*/
+/*    text-align: left;*/
+/*}*/

@@ -1,0 +1,352 @@
+openapi: 3.0.0
+info:
+  title: Puppet API
+  version: V0.1
+servers:
+  - url: https://poppen.antwaan.be/staging-api
+paths:
+  /puppets/rooms/{lang}:
+    get:
+      operationId: getRooms
+      tags:
+        - Puppets
+      summary: Get rooms
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        '404':
+          description: Rooms not found
+
+  /puppets/rooms/{lang}/{roomnumber}:
+    get:
+      operationId: getPuppetsOnRoom
+      tags:
+        - Puppets
+      summary: Get puppets in a room
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+        - name: roomnumber
+          in: path
+          description: Room number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Puppet'
+        '404':
+          description: Room not found
+
+  /puppets/{lang}/{objectnumber}:
+    get:
+      operationId: getPuppet
+      tags:
+        - Puppets
+      summary: Get a puppet
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+        - name: objectnumber
+          in: path
+          description: Object number
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Puppet'
+        '404':
+          description: Puppet not found
+
+  /puppets/game/{lang}:
+    get:
+      operationId: getGameData
+      tags:
+        - Puppets
+      summary: Get game data
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  types:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Type'
+                  puppets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Puppet'
+
+  /puppets/{lang}:
+    get:
+      operationId: getPuppets
+      tags:
+        - Puppets
+      summary: Get all puppets
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Puppet'
+
+  /companies/{lang}:
+    get:
+      operationId: getCompanies
+      tags:
+        - Puppets
+      summary: Get all companies
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+
+  /types/{lang}:
+    get:
+      operationId: getTypes
+      tags:
+        - Puppets
+      summary: Get all puppet types
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Type'
+
+  /makers/{lang}:
+    get:
+      operationId: getMakers
+      tags:
+        - Puppets
+      summary: Get all puppet makers
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Maker'
+
+  /productions/{lang}:
+    get:
+      operationId: getProductions
+      tags:
+        - Puppets
+      summary: Get all puppet productions
+      parameters:
+        - name: lang
+          in: path
+          description: Language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Production'
+
+components:
+  schemas:
+    Room:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        roomnumber:
+          type: integer
+        language_id:
+          type: string
+          maxLength: 2
+        name:
+          type: string
+
+    Puppet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        object_number:
+          type: string
+        date:
+          type: string
+          format: date
+        language_id:
+          type: string
+          maxLength: 2
+        info:
+          type: string
+        room_id:
+          type: integer
+          format: int64
+        company_id:
+          type: integer
+          format: int64
+        type_id:
+          type: integer
+          format: int64
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        makers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Maker'
+        productions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Production'
+        room:
+          $ref: '#/components/schemas/Room'
+        company:
+          $ref: '#/components/schemas/Company'
+        type:
+          $ref: '#/components/schemas/Type'
+
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        language_id:
+          type: string
+          maxLength: 2
+
+    Type:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        language_id:
+          type: string
+          maxLength: 2
+        gameRelevant:
+          type: boolean
+
+    Maker:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        language_id:
+          type: string
+          maxLength: 2
+
+    Production:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        language_id:
+          type: string
+          maxLength: 2
+        date:
+          type: string

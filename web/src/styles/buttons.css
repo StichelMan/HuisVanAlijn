@@ -1,0 +1,82 @@
+@import "./variables.css";
+
+.button-default {
+    border: var(--button-default-border);
+    color: var(--button-default-color);
+    box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
+}
+
+.button-special {
+    border: var(--button-special-border);
+    color: var(--button-special-color);
+    box-shadow: rgba(0, 0, 0, 0.55) 0 10px 30px;
+}
+
+.active-button {
+    background: var(--button-selected-bg) !important;
+    box-shadow: rgba(0, 0, 0, 0.55) 0 10px 30px;
+}
+
+.button {
+    width: var(--button-default-width);
+    height: var(--button-default-height);
+    background: var(--button-default-bg);
+    border-radius: var(--button-default-border-radius);
+    padding: var(--button-default-padding);
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 1rem;
+    text-transform: uppercase;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    text-decoration: none;
+    line-height: 1.2rem;
+    margin: 0 10px;
+}
+
+.button:hover {
+    background: var(--button-selected-bg) !important;
+}
+
+.button-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    overflow: auto;
+    padding-bottom: 50px;
+    min-height: 150px;
+}
+
+.button-default,
+.button-special,
+.active-button {
+    outline: none; /* Remove default focus outline */
+
+}
+
+.button-default:focus,
+.button-special:focus,
+.active-button:focus {
+    box-shadow: 0 0 0 2px var(--button-focus-outline-color); /* Adjust the color and size as needed */
+}
+
+.button {
+    /* ... your existing button styles ... */
+    transition: box-shadow 0.3s ease-in-out; /* Add a smooth transition for better user experience */
+}
+
+.button:hover,
+.button:focus {
+    background: var(--button-selected-bg) !important;
+}
+
+:root {
+    --button-focus-outline-color: #3498db; /* Set the desired color for the focus outline */
+}

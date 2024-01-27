@@ -1,0 +1,48 @@
+.sceneImageList{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.sceneGalleryContainer{
+    height: 600px;
+}
+.sceneImageWrapper img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin: 10px;
+}
+
+.action-button-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.stage-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stage-wrapper .exportButton{
+    height: 10px;
+}
+
+.stage-stylingwrapper{
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.45) 0 15px 30px;
+}
+
+.container.scenemaker{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+

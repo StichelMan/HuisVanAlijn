@@ -1,0 +1,27 @@
+.bold {
+    font-weight: 600;
+}
+
+.w100 {
+    width: 100%;
+}
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+.small-A {
+    min-width: .7rem;
+    margin-bottom: -.6rem;
+    filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(32deg) brightness(97%) contrast(90%);
+}
+
+.big-A {
+    min-width: 1.5rem;
+    filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(32deg) brightness(97%) contrast(90%);
+}
+
+.big-contrast-icon {
+    min-width: 1.5rem;
+    filter: invert(39%) sepia(0%) saturate(0%) hue-rotate(32deg) brightness(97%) contrast(90%);
+}

@@ -1,0 +1,33 @@
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import Game from '../views/Game';
+
+test('renders Game component without crashing', () => {
+  render(<Game />);
+});
+
+test('clicking on a card updates selection state', () => {
+  const { getByText } = render(<Game />);
+  const card = getByText('STYLE');
+  fireEvent.click(card);
+  expect(card).toHaveClass('selected');
+});
+
+test('clicking on two matching cards updates matchedPairs state', () => {
+  const { getAllByText } = render(<Game />);
+  const cards = getAllByText('STYLE');
+  fireEvent.click(cards[0]);
+  fireEvent.click(cards[1]);
+  expect(cards[0]).toHaveClass('paired');
+  expect(cards[1]).toHaveClass('paired');
+});
+
+test('clicking on two non-matching cards updates lives state', () => {
+  const { getAllByText, getByText } = render(<Game />);
+  const cards = getAllByText('STYLE');
+  fireEvent.click(cards[0]);
+  fireEvent.click(cards[2]);
+  const livesElement = getByText(/TRIES LEFT/i);
+  expect(livesElement).toHaveTextContent('4 TRIES LEFT');
+});

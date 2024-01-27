@@ -1,0 +1,5 @@
+- name: Run the gitlab docker container
+  hosts: web 
+  become: true
+  roles:
+    - name: documentation

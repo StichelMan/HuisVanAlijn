@@ -1,0 +1,29 @@
+import { setGlobalFontSize } from '../utils/viewUtils'
+
+describe('View Utils Functions', () => {
+  let scope
+
+  beforeEach(() => {
+    scope = {
+      state: {
+        accessibilitySettings: {
+          isHighContrast: false,
+          isBiggerFontSize: false,
+        },
+      },
+      setState: jest.fn(),
+      setGlobalFontSize: jest.fn(),
+      setGlobalHighContrast: jest.fn(),
+    }
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  test('setGlobalFontSize should update root fontSize', () => {
+    setGlobalFontSize(scope)
+
+    expect(document.documentElement.style.fontSize).toBe('')
+  })
+})

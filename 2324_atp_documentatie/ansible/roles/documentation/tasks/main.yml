@@ -1,0 +1,23 @@
+---
+# tasks file for roles/documentation
+- name: Login to gitlab
+  community.docker.docker_login:
+    registry_url: "{{ regestry_login }}"
+    username: "{{ regestry_user }}"
+    password: "{{ regestry_password }}"
+    reauthorize: true
+
+- name: Create docker container for "{{ environment_name }}"
+  community.docker.docker_container:
+    name: "doc-{{ environment_name }}"
+    state: started
+    recreate: true
+    restart: true
+    pull: true
+    image: "{{ regestry_image }}:{{ environment_name }}"
+    env:
+      BASE_PATH: "/docs-{{ environment_name }}/"
+    volumes:
+      - "/opt/docker/logs/doc-{{ environment_name }}:/var/log"
+    networks:
+      - name: "bridge-{{ environment_name }}"

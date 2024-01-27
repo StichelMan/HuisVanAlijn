@@ -1,0 +1,92 @@
+version: '3'
+
+services:
+  php-web:
+    container_name: migration
+    build:
+      context: ./
+      dockerfile: ./docker/migration/alpine/Dockerfile
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysqldb
+      - DB_PORT=3306 
+      - DB_DATABASE=DBpoppenhuis 
+      - DB_USERNAME=laravel 
+      - DB_PASSWORD=Azerty111
+      - SUB_DIR=/staging-api/
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysqldb
+    volumes:
+      - ./images:/var/www/storage/app/public/
+#    networks:
+#      - mynetwork
+  mysqldb:
+    build:
+      context: ./
+      dockerfile: ./docker/mysql/Dockerfile
+    container_name: mysqldb
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - ROOT_PASSWORD=Azerty123
+      - DATABASE=DBpoppenhuis
+      - EXTRA_USER=laravel
+      - EXTRA_PASS=Azerty111
+      - EXTRA_DATABASE=DBpoppenhuis
+      - EXTRA_PERMISSIONS=ALL
+#    networks:
+#      - mynetwork
+#  myadmin:
+#    build:
+#      context: ./
+#      dockerfile: ./docker/phpmyadmin/custom/Dockerfile
+#    container_name: phpmyadmin
+#    ports:
+#      - "8000:80"
+#    environment:
+#      - HOST=mysqldb
+#    restart: unless-stopped
+#    depends_on:
+#      - mysqldb
+#    networks:
+#      - mynetwork
+#  traefik:
+#    build:
+#      context: .
+#      dockerfile: ./docker/traefik/Dockerfile
+#    container_name: traefik
+#    ports:
+#      - "80:80"
+##      - "8080:8080"
+ #     - "443:443"
+#  php-web-old:
+#    container_name: migration-old
+#    build:
+#      context: ./
+#      dockerfile: ./docker/working-migration/Dockerfile
+#    environment:
+##      - DB_CONNECTION=mysql
+#      - DB_HOST=mysqldb
+#      - DB_PORT=3306 
+#      - DB_DATABASE=DBpoppenhuis 
+#      - DB_USERNAME=root 
+#      - DB_PASSWORD=Azerty123
+#    ports:
+#      - "8081:80"
+#    depends_on:
+#      - mysqldb
+#    networks:
+#      - mynetwork
+#  php-container:
+#    container_name: php-container
+#    image: php:8.3.1RC3-bullseye
+#    volumes:
+#      - ./app:/app
+#    command: tail -f /etc/hostname
+
+#networks:
+#  mynetwork:
+#    driver: bridge

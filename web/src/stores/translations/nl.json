@@ -1,0 +1,43 @@
+{
+  "welcome_view": {
+    "discoverDolls": "Ontdek de Poppen",
+    "testKnowledge": "Test je kennis",
+    "welcomeTitle": "Welkom in het poppenhuis",
+    "designScene": "Ontwerp je eigen scène"
+  },
+  "rooms_view": {
+    "title": "Kies een thema waarover je graag meer wil weten"
+  },
+  "accessibility_view": {
+    "title": "TOEGANKELIJKHEID",
+    "subTitle": "Instellingen",
+    "contrastSetting0": "HOGER",
+    "contrastSetting1": "CONTRAST",
+    "fontSizeSetting0": "GROTER",
+    "fontSizeSetting1": "LETTERTYPE",
+    "languageSetting": "TAAL"
+  },
+  "puppetdetail_component": {
+    "selectReminder": "Selecteer een item",
+    "loadingReminder": "Details worden geladen...",
+    "errorReminder": "Fout bij het laden:",
+    "date": "Datum:",
+    "company": "Bedrijf:",
+    "makers": "Maker(s):",
+    "production": "Productie:",
+    "related": "Gerelateerde collectie"
+  },
+  "puppetslist_component": {
+    "loadingReminder": "Poppen worden laden...",
+    "errorReminder": "Er ging iets mis. Probeer het later opnieuw."
+  },
+  "createscene_view": {
+    "toggleDrawer": "Kies een object",
+    "deleteLast": "Verwijder de laatste figuur",
+    "exportScene": "Voeg je scène toe aan de screensaver",
+    "puppets": "Poppen",
+    "backgrounds": "Achtergronden",
+    "expressions": "Expressies",
+    "limitationWarning": "Kan niet meer dan 10 afbeeldingen toevoegen."
+  }
+}

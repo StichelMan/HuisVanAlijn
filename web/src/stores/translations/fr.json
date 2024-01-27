@@ -1,0 +1,43 @@
+{
+  "welcome_view": {
+    "discoverDolls": "Découvrir les marionettes",
+    "testKnowledge": "Testez vos connaissances",
+    "welcomeTitle": "Bienvenue dans la maison des marionettes",
+    "designScene": "Concevez votre propre scène"
+  },
+  "rooms_view": {
+    "title": "Choisissez un sujet sur lequel vous aimeriez en savoir plus"
+  },
+  "accessibility_view": {
+    "title": "ACCESSIBILITÉ",
+    "subTitle": "Paramètres",
+    "contrastSetting0": "PLUS ÉLEVÉ",
+    "contrastSetting1": "CONTRASTE",
+    "fontSizeSetting0": "PLUS GRAND",
+    "fontSizeSetting1": "TAILLE DU TEXTE",
+    "languageSetting": "LANGUE"
+  },
+  "puppetdetail_component": {
+    "selectReminder": "Sélectionnez un élément",
+    "loadingReminder": "Chargement des détails de la marionnette...",
+    "errorReminder": "Erreur lors du chargement des détails:",
+    "date": "Date :",
+    "company": "Compagnie :",
+    "makers": "Fabricant(s) :",
+    "production": "Production :",
+    "related": "Objets de collection associés"
+  },
+  "puppetslist_component": {
+    "loadingReminder": "Chargement des marionnettes...",
+    "errorReminder": "Ce service est actuellement indisponible. Veuillez réessayer plus tard."
+  },
+  "createscene_view": {
+    "toggleDrawer": "Choisissez un objet",
+    "deleteLast": "Supprimer le dernier chiffre",
+    "exportScene": "Ajoutez votre scène à l'économiseur d'écran",
+    "puppets": "Marionnettes",
+    "backgrounds": "Arrière-plans",
+    "expressions": "Expressions",
+    "limitationWarning": "Impossible d'ajouter plus de 10 images."
+  }
+}
