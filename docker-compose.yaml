@@ -20,7 +20,7 @@ services:
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=mysqldb
-      - DB_PORT=3306 
+      - DB_PORT=3307 
       - DB_DATABASE=DBpoppenhuis 
       - DB_USERNAME=laravel 
       - DB_PASSWORD=Azerty111
@@ -39,7 +39,7 @@ services:
     container_name: mysqldb
     restart: always
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       - ROOT_PASSWORD=Azerty123
       - DATABASE=DBpoppenhuis
