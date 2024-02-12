@@ -10,7 +10,7 @@ services:
       - BACKEND_BASE_URL=http://localhost:8080
       - SUB_DIR=/
     ports:
-      - 80:80
+      - 81:80
 
   php-web:
     container_name: migration
