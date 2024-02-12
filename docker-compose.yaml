@@ -7,7 +7,7 @@ services:
       dockerfile: ./docker/alpine/Dockerfile
     container_name: web
     environment:
-      - BACKEND_BASE_URL=http://localhost:8081
+      - BACKEND_BASE_URL=http://eww4wco.158.220.108.165.sslip.io:80
       - SUB_DIR=/
     ports:
       - 81:80
@@ -19,7 +19,7 @@ services:
       dockerfile: ./docker/migration/alpine/Dockerfile
     environment:
       - DB_CONNECTION=mysql
-      - DB_HOST=mysqldb
+      - DB_HOST=http://lcwwckc.158.220.108.165.sslip.io
       - DB_PORT=3307 
       - DB_DATABASE=DBpoppenhuis 
       - DB_USERNAME=laravel 
